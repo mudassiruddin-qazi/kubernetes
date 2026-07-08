@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: course-frontend
+  labels:
+    app: course-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: course-frontend
+  template:
+    metadata:
+      labels:
+        app: course-frontend
+    spec:
+      containers:
+      - name: course-frontend
+        image: mudassirq692/course-frontend:v1
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 80
+
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
